@@ -159,18 +159,22 @@ public class LoginGUI extends JFrame {
 					try {
 						Connection con = conn.connDb();
 						Statement st = con.createStatement();
-						ResultSet rs = st.executeQuery("SELECT * FROM users");
+						ResultSet rs = st.executeQuery("SELECT * FROM users"); // Veritabanından gelen sonuçları satır satır dolaşmamızı sağlar.
 						while(rs.next())
 						{
+							// kullanıcının girdiği veriler ile veri tabanındakiler uyuşuyor mu?
 							if(fld_doctorTc.getText().equals(rs.getString("tcno")) && fld_doctorPass.getText().equals(rs.getString("password")))
 							{
-								Bashekim bhekim = new Bashekim();
-								bhekim.setId(rs.getInt("id"));
+								Bashekim bhekim = new Bashekim(); // Eğer bilgiler eşleşirse baş hekim nesnesi oluşur
+								bhekim.setId(rs.getInt("id")); // Veritabanındaki id sütunundan gelen değer alınır ve bhekim nesnesine atanır.
 								bhekim.setPassword("password");
 								bhekim.setTcno(rs.getString("tcno"));
 								bhekim.setName(rs.getString("name"));
 								bhekim.setType(rs.getString("type"));
 								System.out.println(bhekim.getName());
+								BashekimGUI bGUI = new BashekimGUI(bhekim);
+								bGUI.setVisible(true);
+								dispose(); // var olan JFrame kapanır
 							}
 						}
 						
