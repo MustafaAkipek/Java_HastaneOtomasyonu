@@ -7,6 +7,7 @@ public class DBConnection {
 
     public DBConnection() {}
 
+    // Connection metodun dönüş tipi
     public Connection connDb() {
         try {
             // SQL Server JDBC sürücüsünü yüklüyoruz
@@ -15,7 +16,7 @@ public class DBConnection {
             // Docker'daki MSSQL'e bağlantı stringi
             this.c = DriverManager.getConnection(
                 "jdbc:sqlserver://localhost:14330;databaseName=hospital;encrypt=false;",
-                "sa", "MeUsTiAn0301!" // Kullanıcı adı ve şifreni yaz
+                "sa", "MeUsTiAn0301!"
             );
 
             return c;
