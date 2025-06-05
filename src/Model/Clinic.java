@@ -92,7 +92,7 @@ public class Clinic {
 			return false;
 	}
 	
-	public boolean upateDoctor(int id, String name) throws SQLException { 
+	public boolean updateClinic(int id, String name) throws SQLException { 
 		
 		String query = "UPDATE clinics SET name=? WHERE id = ?";
 		boolean key = false;
@@ -113,6 +113,21 @@ public class Clinic {
 		else
 			return false;
 	}
+	
+	public Clinic getFetch(int id) throws SQLException {
+		Connection con = conn.connDb();
+		Clinic c = new Clinic();
+		st = con.createStatement();
+		rs = st.executeQuery("SELECT * FROM clinics WHERE id = " + id);
+		while(rs.next()) {
+			c.setId(rs.getInt("id"));
+			c.setName(rs.getString("name"));
+			break;
+		}
+		
+		return c;
+	}
+	
 
 	public int getId() {
 		return id;
