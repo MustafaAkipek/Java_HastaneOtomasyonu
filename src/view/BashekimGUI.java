@@ -11,7 +11,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import Model.Bashekim;
+import Model.*;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -32,6 +32,7 @@ public class BashekimGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	static Bashekim bashekim = new Bashekim();
+	Clinic clinic = new Clinic();
 	private JPanel w_pane;
 	private JTextField fld_dName;
 	private JTextField fld_dTcno;
@@ -40,6 +41,10 @@ public class BashekimGUI extends JFrame {
 	private JTable table_doctor;
 	private DefaultTableModel doctorModel = null; // tabloya veri eklemek için Table Model lazım
 	private Object[] doctorData = null; // datalarını içine atacağımız array olacak
+	private JTable table_clinic;
+	private JTextField fld_clinicName;
+	private DefaultTableModel clinicModel = null;
+	private Object[] clinicData = null;
 
 	/**
 	 * Launch the application.
@@ -59,15 +64,17 @@ public class BashekimGUI extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public BashekimGUI(Bashekim bashekim) {
+	public BashekimGUI(Bashekim bashekim) throws SQLException {
 		
+		// Doktor Model
 		doctorModel = new DefaultTableModel();
 		Object[] colDoctorName = new Object[4]; // 4 tane column u çağıracağız
 		colDoctorName[0] = "ID";
-		colDoctorName[0] = "Ad Soyad";
-		colDoctorName[0] = "TC NO";
-		colDoctorName[0] = "Şifre";
+		colDoctorName[1] = "Ad Soyad";
+		colDoctorName[2] = "TC NO";
+		colDoctorName[3] = "Şifre";
 		doctorModel.setColumnIdentifiers(colDoctorName);
 		
 		doctorData = new Object[4]; // row u oluşturduk
@@ -79,6 +86,22 @@ public class BashekimGUI extends JFrame {
 			doctorData[3] = bashekim.getDoctorList().get(i).getPassword();
 			doctorModel.addRow(doctorData);
 		}
+		
+		// Clinic Model
+		clinicModel = new DefaultTableModel();
+		Object[] colClinic = new Object[2];
+		colClinic[0] = "ID";
+		colClinic[1] = "Poliklinik Adı";
+		clinicModel.setColumnIdentifiers(colClinic); // klinik modelin column larının içine array atıyoruz
+		clinicData = new Object[2];
+		for(int i = 0; i < clinic.getList().size(); i++) {
+			clinicData[0] = clinic.getList().get(i).getId();
+			clinicData[1] = clinic.getList().get(i).getName();
+			clinicModel.addRow(clinicData);
+		}
+		
+		
+		
 		
 		setTitle("Hastane Yönetim Sistemi");
 		setResizable(false);
@@ -238,6 +261,56 @@ public class BashekimGUI extends JFrame {
 			}
 		});
 		
+		JPanel w_clinic = new JPanel();
+		w_clinic.setBackground(new Color(255, 255, 255));
+		w_clinic.setToolTipText("");
+		w_tab.addTab("Poliklinikler", null, w_clinic, null);
+		w_clinic.setLayout(null);
+		
+		JScrollPane w_scrollClinic = new JScrollPane();
+		w_scrollClinic.setBounds(10, 10, 260, 321);
+		w_clinic.add(w_scrollClinic);
+		
+		table_clinic = new JTable(clinicModel);
+		w_scrollClinic.setViewportView(table_clinic);
+		
+		JLabel lblPoliklinikAd = new JLabel("Poliklinik Adı");
+		lblPoliklinikAd.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
+		lblPoliklinikAd.setBounds(280, 10, 96, 26);
+		w_clinic.add(lblPoliklinikAd);
+		
+		fld_clinicName = new JTextField();
+		fld_clinicName.setColumns(10);
+		fld_clinicName.setBounds(280, 35, 151, 26);
+		w_clinic.add(fld_clinicName);
+		
+		JButton btn_addClinic = new JButton("Ekle");
+		btn_addClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fld_clinicName.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						if(clinic.addClinic(fld_clinicName.getText())) {
+							Helper.showMsg("success");
+							fld_clinicName.setText(null);
+							updateClinicModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		btn_addClinic.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
+		btn_addClinic.setBounds(280, 71, 151, 36);
+		w_clinic.add(btn_addClinic);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(440, 7, 261, 326);
+		w_clinic.add(scrollPane);
+		
 	}
 	
 	public void updateDoctorModel() throws SQLException {
@@ -253,4 +326,14 @@ public class BashekimGUI extends JFrame {
 		}
 	}
 	
+	public void updateClinicModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table_clinic.getModel();
+		clearModel.setRowCount(0); // bu method çalıştığında tüm row lar silinir
+		for(int i = 0; i < clinic.getList().size(); i++)
+		{
+			clinicData[0] = clinic.getList().get(i).getId();
+			clinicData[1] = clinic.getList().get(i).getName();
+			clinicModel.addRow(clinicData);
+		}
+	}
 }

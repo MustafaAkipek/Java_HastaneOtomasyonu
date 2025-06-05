@@ -36,7 +36,7 @@ public class Bashekim extends User{
 			e.printStackTrace();
 		}
 		return list;
-		}	
+	}	
 	
 	public boolean addDoctor(String tcno, String password, String name) throws SQLException { // database' e ya eklenmiştir ya da eklenmemiştir bu yüzden bool
 		

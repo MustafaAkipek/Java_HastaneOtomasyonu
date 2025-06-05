@@ -11,7 +11,6 @@ public class Helper {
 		UIManager.put("OptionPane.okButtonText", "Tamam");
 		UIManager.put("OptionPane.yesButtonText", "Evet");
 	}
-	
 
 	public static void showMsg(String str) {
 		String msg;
