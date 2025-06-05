@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import Model.Bashekim;
@@ -172,6 +176,28 @@ public class BashekimGUI extends JFrame {
 		fld_doctorID.setColumns(10);
 		
 		JButton btn_delDoctor = new JButton("Sil");
+		btn_delDoctor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fld_doctorID.getText().length() == 0) {
+					Helper.showMsg("Lütfen geçerli bir doktor seçiniz!");
+				} else {
+					if(Helper.confirm("sure")) {
+						int selectID = Integer.parseInt(fld_doctorID.getText());
+						try {
+							boolean control = bashekim.deleteDoctor(selectID);
+							if(control) {
+								Helper.showMsg("success");
+								fld_doctorID.setText(null);
+								updateDoctorModel();
+							}
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		
 		btn_delDoctor.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
 		btn_delDoctor.setBounds(485, 298, 216, 33);
 		w_doctor.add(btn_delDoctor);
@@ -182,6 +208,36 @@ public class BashekimGUI extends JFrame {
 		
 		table_doctor = new JTable(doctorModel);
 		w_scrollDoctor.setViewportView(table_doctor);
+		table_doctor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {		
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+			try {
+				fld_doctorID.setText(table_doctor.getValueAt(table_doctor.getSelectedRow(), 0).toString()); // 0 id yi temsil eder yani ilk column
+			} catch (Exception ex) {
+				}
+			}
+		});
+		
+		table_doctor.getModel().addTableModelListener(new TableModelListener() {
+			
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if(e.getType() == TableModelEvent.UPDATE) { // GUI tablosunda manuel yapılan değişiklik var mı onu test ediyor
+					int selectID = Integer.parseInt(table_doctor.getValueAt(table_doctor.getSelectedRow(), 0).toString()); 
+					String selectName = table_doctor.getValueAt(table_doctor.getSelectedRow(), 1).toString();
+					String selectTcno = table_doctor.getValueAt(table_doctor.getSelectedRow(), 2).toString();
+					String selectPass = table_doctor.getValueAt(table_doctor.getSelectedRow(), 3).toString();
+					
+					try {
+						boolean control = bashekim.upateDoctor(selectID, selectTcno, selectPass, selectName);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		
 	}
 	
 	public void updateDoctorModel() throws SQLException {

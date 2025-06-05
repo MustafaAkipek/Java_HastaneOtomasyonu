@@ -59,9 +59,51 @@ public class Bashekim extends User{
 			return true;
 		else
 			return false;
-		
 	}
 	
+	public boolean deleteDoctor(int id) throws SQLException { 
+		
+		String query = "DELETE FROM users WHERE id = ?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query); // SQL sorgusu için bir şablon (template) oluşturur. Bu şablon daha sonra içine değer yerleştirerek çalıştırılır.
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(key)
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean upateDoctor(int id, String tcno, String password, String name) throws SQLException { 
+		
+		String query = "UPDATE users SET name=?, tcno=?, password=? WHERE id = ?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query); // SQL sorgusu için bir şablon (template) oluşturur. Bu şablon daha sonra içine değer yerleştirerek çalıştırılır.
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, tcno);
+			preparedStatement.setString(3, password);
+			preparedStatement.setInt(4, id);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(key)
+			return true;
+		else
+			return false;
+	}
+
 	
 }
 	
