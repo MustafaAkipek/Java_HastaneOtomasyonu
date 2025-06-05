@@ -11,7 +11,10 @@ public class Helper {
 		case "fill":
 			msg = "Lütfen tüm alanları doldurunuz.";
 			break;
-			default:
+		case "success":
+			msg = "İşlem başarılı!";
+			break;
+		default:
 				msg = str;
 		}
 
