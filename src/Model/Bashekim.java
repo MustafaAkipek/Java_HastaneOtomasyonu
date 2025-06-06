@@ -36,7 +36,26 @@ public class Bashekim extends User{
 			e.printStackTrace();
 		}
 		return list;
-	}	
+	}
+	
+	public ArrayList<User> getClinicDoctorList(int clinic_id){
+		ArrayList<User> list = new ArrayList<>();
+		
+		User obj;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT u.id, u.tcno, u.type, u.name, u.password FROM workers w LEFT JOIN users u ON w.user_id = u.id WHERE clinic_id = " + clinic_id);
+			while(rs.next()) 
+			{
+				obj = new User(rs.getInt("id"), rs.getString("tcno"), rs.getString("name"), rs.getString("password"), 
+						rs.getString("type"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	public boolean addDoctor(String tcno, String password, String name) throws SQLException { // database' e ya eklenmiştir ya da eklenmemiştir bu yüzden bool
 		
@@ -93,6 +112,33 @@ public class Bashekim extends User{
 			preparedStatement.setString(3, password);
 			preparedStatement.setInt(4, id);
 			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(key)
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean addWorker(int user_id, int clinic_id) throws SQLException { 		
+		String query = "INSERT INTO workers" + "(user_id, clinic_id) VALUES" + "(?,?)";
+		boolean key = false;
+		int count = 0;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM workers WHERE clinic_id=" + clinic_id + " AND user_id=" + user_id);
+			while(rs.next()) {
+				count++;
+			}
+			if(count == 0) {
+				preparedStatement = con.prepareStatement(query); // SQL sorgusu için bir şablon (template) oluşturur. Bu şablon daha sonra içine değer yerleştirerek çalıştırılır.
+				preparedStatement.setInt(1, user_id); // 1. soru işaretini tcno ile değiştir 
+				preparedStatement.setInt(2, clinic_id);
+				preparedStatement.executeUpdate();
+			}		
 			key = true;
 		} catch (Exception e) {
 			e.printStackTrace();
