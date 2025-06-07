@@ -139,7 +139,7 @@ public class BashekimGUI extends JFrame {
 		w_pane.add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Çıkış Yap");
-		btnNewButton.setBounds(641, 30, 85, 21);
+		btnNewButton.setBounds(616, 24, 110, 29);
 		btnNewButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 11));
 		w_pane.add(btnNewButton);
 
