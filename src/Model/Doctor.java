@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Doctor extends User {
 	Statement st = null; // Sql sorgusunu çalıştırmak için kullanılan Java sınıfı
@@ -50,6 +51,49 @@ public class Doctor extends User {
 		}
 		
 		if(key == 1)
+			return true;
+		else
+			return false;
+	}
+	
+	public ArrayList<Whour> getWhourList(int doctor_id){
+		ArrayList<Whour> list = new ArrayList<>();
+		
+		Whour obj;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM whour WHERE status = 'a' AND doctor_id = " + doctor_id);
+			while(rs.next()) 
+			{
+				obj = new Whour();
+				obj.setId(rs.getInt("id"));
+				obj.setDoctor_id(rs.getInt("doctor_id"));
+				obj.setDoctor_name(rs.getString("doctor_name"));
+				obj.setStatus(rs.getString("status"));
+				obj.setWdate(rs.getString("wdate"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public boolean deleteWhour(int id) throws SQLException { 
+		
+		String query = "DELETE FROM whour WHERE id = ?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query); // SQL sorgusu için bir şablon (template) oluşturur. Bu şablon daha sonra içine değer yerleştirerek çalıştırılır.
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(key)
 			return true;
 		else
 			return false;

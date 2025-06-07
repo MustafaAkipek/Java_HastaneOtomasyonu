@@ -117,10 +117,7 @@ public class BashekimGUI extends JFrame {
 		colWorker[0] = "ID";
 		colWorker[1] = "Ad Soyad";
 		workerModel.setColumnIdentifiers(colWorker);
-		Object[] workerData = new Object[2];
-		
-		
-		
+		Object[] workerData = new Object[2];	
 
 		setTitle("Hastane Yönetim Sistemi");
 		setResizable(false);
