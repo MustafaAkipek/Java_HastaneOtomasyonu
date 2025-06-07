@@ -27,7 +27,7 @@ public class Doctor extends User {
 		String query = "INSERT INTO whour" + "(doctor_id, doctor_name, wdate) VALUES" + "(?, ?, ?)";
 		try {
 			st = con.createStatement(); // Bu nesne sayesinde SQL sorguları doğrudan çalıştırılabilir (yani PreparedStatement değil).
-			rs = st.executeQuery("SELECT * FROM whour WHERE status = 'a' AND doctor_id = " + doctor_id + " AND wdate '"
+			rs = st.executeQuery("SELECT * FROM whour WHERE status = 'a' AND doctor_id = " + doctor_id + " AND wdate = '"
 					+ wdate + "'"); // Sorgu çalıştırılıyor ve sonucu ResultSet (rs) içine alınıyor.
 			
 			while(rs.next()) {

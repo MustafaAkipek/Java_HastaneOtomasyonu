@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import Helper.*;
 import Model.Bashekim;
+import Model.Doctor;
 
 public class LoginGUI extends JFrame {
 
@@ -165,16 +166,30 @@ public class LoginGUI extends JFrame {
 							// kullanıcının girdiği veriler ile veri tabanındakiler uyuşuyor mu?
 							if(fld_doctorTc.getText().equals(rs.getString("tcno")) && fld_doctorPass.getText().equals(rs.getString("password")))
 							{
-								Bashekim bhekim = new Bashekim(); // Eğer bilgiler eşleşirse baş hekim nesnesi oluşur
-								bhekim.setId(rs.getInt("id")); // Veritabanındaki id sütunundan gelen değer alınır ve bhekim nesnesine atanır.
-								bhekim.setPassword("password");
-								bhekim.setTcno(rs.getString("tcno"));
-								bhekim.setName(rs.getString("name"));
-								bhekim.setType(rs.getString("type"));
-								System.out.println(bhekim.getName());
-								BashekimGUI bGUI = new BashekimGUI(bhekim);
-								bGUI.setVisible(true);
-								dispose(); // var olan JFrame kapanır
+								if(rs.getString("type").equals("bashekim")) {
+									Bashekim bhekim = new Bashekim(); // Eğer bilgiler eşleşirse baş hekim nesnesi oluşur
+									bhekim.setId(rs.getInt("id")); // Veritabanındaki id sütunundan gelen değer alınır ve bhekim nesnesine atanır.
+									bhekim.setPassword("password");
+									bhekim.setTcno(rs.getString("tcno"));
+									bhekim.setName(rs.getString("name"));
+									bhekim.setType(rs.getString("type"));
+									BashekimGUI bGUI = new BashekimGUI(bhekim);
+									bGUI.setVisible(true);
+									dispose(); // var olan JFrame kapanır
+								}
+								
+								if(rs.getString("type").equals("doktor")) {
+									Doctor doctor = new Doctor();
+									doctor.setId(rs.getInt("id")); // Veritabanındaki id sütunundan gelen değer alınır ve bhekim nesnesine atanır.
+									doctor.setPassword("password");
+									doctor.setTcno(rs.getString("tcno"));
+									doctor.setName(rs.getString("name"));
+									doctor.setType(rs.getString("type"));
+									DoctorGUI dGUI = new DoctorGUI(doctor);
+									dGUI.setVisible(true);
+									dispose();
+									
+								}
 							}
 						}
 						
