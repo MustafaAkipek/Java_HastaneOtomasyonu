@@ -1,8 +1,11 @@
 package Model;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import Helper.DBConnection;
 
@@ -23,6 +26,30 @@ public class Whour {
 		this.doctor_name = doctor_name;
 		this.wdate = wdate;
 		this.status = status;
+	}
+	
+	public ArrayList<Whour> getWhourList(int doctor_id){
+		ArrayList<Whour> list = new ArrayList<>();
+		
+		Whour obj;
+		try {
+			Connection con = conn.connDb();
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM whour WHERE status = 'a' AND doctor_id = " + doctor_id);
+			while(rs.next()) 
+			{
+				obj = new Whour();
+				obj.setId(rs.getInt("id"));
+				obj.setDoctor_id(rs.getInt("doctor_id"));
+				obj.setDoctor_name(rs.getString("doctor_name"));
+				obj.setStatus(rs.getString("status"));
+				obj.setWdate(rs.getString("wdate"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	public int getId() {
