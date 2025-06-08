@@ -57,7 +57,7 @@ public class LoginGUI extends JFrame {
 	 */
 	public LoginGUI() {
 		setResizable(false);
-		setTitle("Hastane Otomasyoonu");
+		setTitle("Hastane Yönetim Sistemi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 450);
 		w_pane = new JPanel();
@@ -108,6 +108,13 @@ public class LoginGUI extends JFrame {
 		w_hastaLogin.add(fld_hastaPass);
 		
 		JButton btn_register = new JButton("Kayıt Ol");
+		btn_register.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegisterGUI rGUI = new RegisterGUI();
+				rGUI.setVisible(true);
+				dispose();
+			}
+		});
 		btn_register.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
 		btn_register.setBounds(32, 155, 180, 37);
 		w_hastaLogin.add(btn_register);

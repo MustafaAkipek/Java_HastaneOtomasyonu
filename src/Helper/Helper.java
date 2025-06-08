@@ -20,6 +20,9 @@ public class Helper {
 		case "fill":
 			msg = "Lütfen tüm alanları doldurunuz.";
 			break;
+		case "error":
+			msg = "Bir hata gerçekleşti!";
+			break;
 		case "success":
 			msg = "İşlem başarılı!";
 			break;

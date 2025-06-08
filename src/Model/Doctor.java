@@ -44,7 +44,6 @@ public class Doctor extends User {
 				preparedStatement.executeUpdate();
 			}
 			
-			key = 1;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
