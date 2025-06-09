@@ -55,7 +55,50 @@ public class Hasta extends User{
 		else
 			return false;
 	}
-
 	
+	public boolean addAppointment(int doctor_id, int hasta_id, String doctor_name, String hasta_name, String appDate) throws Exception {
+		int key = 0;
+		String query = "INSERT INTO appointments" + "(doctor_id, doctor_name, hasta_id, hasta_name, app_date) VALUES" + "(?, ?, ?, ?, ?)";
+		
+		try {
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setInt(1, doctor_id);
+			preparedStatement.setString(2, doctor_name);
+			preparedStatement.setInt(3, hasta_id);
+			preparedStatement.setString(4, hasta_name);
+			preparedStatement.setString(5, appDate);
+			preparedStatement.executeUpdate();
+			key = 1;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(key == 1)
+			return true;
+		else
+			return false;
+	}
 	
+	public boolean updateWhourStatus(int doctor_id, String wDate) throws Exception {
+		int key = 0;
+		String query = "UPDATE whour SET status = ? WHERE doctor_id = ? AND wdate = ?";
+		
+		try {
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, "p");
+			preparedStatement.setInt(2, doctor_id);
+			preparedStatement.setString(3, wDate);
+			preparedStatement.executeUpdate();
+			key = 1;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(key == 1)
+			return true;
+		else
+			return false;
+	} 
 }

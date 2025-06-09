@@ -25,16 +25,17 @@ import javax.swing.JPasswordField;
 import Helper.*;
 import Model.Bashekim;
 import Model.Doctor;
+import Model.Hasta;
 
 public class LoginGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel w_pane;
 	private JTextField fld_hastaTC;
-	private JTextField fld_hastaPass;
 	private JTextField fld_doctorTc;
 	private JPasswordField fld_doctorPass;
 	private DBConnection conn = new DBConnection();
+	private JPasswordField fld_hastaPass;
 
 	/**
 	 * Launch the application.
@@ -101,12 +102,6 @@ public class LoginGUI extends JFrame {
 		w_hastaLogin.add(fld_hastaTC);
 		fld_hastaTC.setColumns(10);
 		
-		fld_hastaPass = new JTextField();
-		fld_hastaPass.setFont(new Font("Yu Gothic Light", Font.PLAIN, 18));
-		fld_hastaPass.setColumns(10);
-		fld_hastaPass.setBounds(169, 86, 266, 31);
-		w_hastaLogin.add(fld_hastaPass);
-		
 		JButton btn_register = new JButton("Kayıt Ol");
 		btn_register.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -120,9 +115,53 @@ public class LoginGUI extends JFrame {
 		w_hastaLogin.add(btn_register);
 		
 		JButton btn_hastaLogin = new JButton("Giriş Yap");
+		btn_hastaLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fld_hastaTC.getText().length() == 0 || fld_hastaPass.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					boolean key = true;
+					try {
+						Connection con = conn.connDb();
+						Statement st = con.createStatement();
+						ResultSet rs = st.executeQuery("SELECT * FROM users"); // Veritabanından gelen sonuçları satır satır dolaşmamızı sağlar.
+						while(rs.next())
+						{
+							// kullanıcının girdiği veriler ile veri tabanındakiler uyuşuyor mu?
+							if(fld_hastaTC.getText().equals(rs.getString("tcno")) && fld_hastaPass.getText().equals(rs.getString("password")))
+							{
+								if(rs.getString("type").equals("hasta")) {
+									Hasta hasta= new Hasta(); // Eğer bilgiler eşleşirse baş hekim nesnesi oluşur
+									hasta.setId(rs.getInt("id")); // Veritabanındaki id sütunundan gelen değer alınır ve bhekim nesnesine atanır.
+									hasta.setPassword("password");
+									hasta.setTcno(rs.getString("tcno"));
+									hasta.setName(rs.getString("name"));
+									hasta.setType(rs.getString("type"));
+									HastaGUI hGUI = new HastaGUI(hasta);
+									hGUI.setVisible(true);
+									dispose(); // var olan JFrame kapanır
+									key = false;
+								}
+							}
+						}
+						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					} 
+					
+					if(key) {
+						Helper.showMsg("Böyle bir kullanıcı hasta bulunamadı, lütfen kayıt olunuz!");
+					}
+				}
+			}
+		});
 		btn_hastaLogin.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
 		btn_hastaLogin.setBounds(240, 155, 180, 37);
 		w_hastaLogin.add(btn_hastaLogin);
+		
+		fld_hastaPass = new JPasswordField();
+		fld_hastaPass.setBounds(167, 91, 267, 28);
+		w_hastaLogin.add(fld_hastaPass);
 		
 		JPanel w_doctorLogin = new JPanel();
 		w_doctorLogin.setBackground(new Color(255, 255, 255));
