@@ -16,7 +16,7 @@ public class DBConnection {
             // Docker'daki MSSQL'e bağlantı stringi
             this.c = DriverManager.getConnection(
                 "jdbc:sqlserver://localhost:14330;databaseName=hospital;encrypt=false;",
-                "sa", "MeUsTiAn0301!"
+                "sa", "1234"
             );
 
             return c;

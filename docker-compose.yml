@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  my_sql_server:
+    container_name: my_sql_server_new
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1234
+      - MSSQL_PID=Developer
+    ports:
+      - "14330:1433"
+    hostname: my_sql_server
+    restart: unless-stopped
