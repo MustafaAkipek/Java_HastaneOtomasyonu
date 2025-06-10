@@ -87,6 +87,13 @@ public class DoctorGUI extends JFrame {
 		w_pane.add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Çıkış Yap");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginGUI login = new LoginGUI();
+				login.setVisible(true);
+				dispose();
+			}
+		});
 		btnNewButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 11));
 		btnNewButton.setBounds(623, 10, 103, 29);
 		w_pane.add(btnNewButton);

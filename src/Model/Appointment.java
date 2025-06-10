@@ -36,7 +36,7 @@ public class Appointment {
 		Connection con = conn.connDb(); // veri tabanı bağlantısı nesnesi döner
 		try {
 			st = con.createStatement();
-			rs = st.executeQuery("SELECT * FROM appointment WHERE hasta_id = " + hasta_id);
+			rs = st.executeQuery("SELECT * FROM appointments WHERE hasta_id = " + hasta_id);
 			while (rs.next()) {
 				obj = new Appointment();
 				obj.setId(rs.getInt("id"));

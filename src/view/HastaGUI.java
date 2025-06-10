@@ -79,21 +79,28 @@ public class HastaGUI extends JFrame {
 		doctorModel.setColumnIdentifiers(colDoctor);
 		doctorData = new Object[2]; // row u oluşturduk
 
-		// Doktor Model
+		// Whour Model
 		whourModel = new DefaultTableModel();
 		Object[] colWhour = new Object[2]; // 2 tane column u çağıracağız
 		colWhour[0] = "ID";
 		colWhour[1] = "Tarih";
 		whourModel.setColumnIdentifiers(colWhour);
 		whourData = new Object[2]; // row u oluşturduk
-		
-		// Doktor Model
-				whourModel = new DefaultTableModel();
-				Object[] colWhour = new Object[2]; // 2 tane column u çağıracağız
-				colWhour[0] = "ID";
-				colWhour[1] = "Tarih";
-				whourModel.setColumnIdentifiers(colWhour);
-				whourData = new Object[2]; // row u oluşturduk
+
+		// Appoint Model
+		appointModel = new DefaultTableModel();
+		Object[] colAppoint = new Object[3]; // 3 tane column u çağıracağız
+		colAppoint[0] = "ID";
+		colAppoint[1] = "Doktor";
+		colAppoint[2] = "Tarih";
+		appointModel.setColumnIdentifiers(colAppoint);
+		appointData = new Object[3]; // row u oluşturduk
+		for (int i = 0; i < appoint.getHastaList(hasta.getId()).size(); i++) {
+			appointData[0] = appoint.getHastaList(hasta.getId()).get(i).getId();
+			appointData[1] = appoint.getHastaList(hasta.getId()).get(i).getDoctorName();
+			appointData[2] = appoint.getHastaList(hasta.getId()).get(i).getAppDate();
+			appointModel.addRow(appointData);
+		}
 
 		setResizable(false);
 		setTitle("Hastane Yönetim Sistemi");
@@ -112,6 +119,13 @@ public class HastaGUI extends JFrame {
 		w_pane.add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Çıkış Yap");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginGUI login = new LoginGUI();
+				login.setVisible(true);
+				dispose();
+			}
+		});
 		btnNewButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 11));
 		btnNewButton.setBounds(616, 10, 110, 29);
 		w_pane.add(btnNewButton);
@@ -230,6 +244,7 @@ public class HastaGUI extends JFrame {
 							Helper.showMsg("success");
 							hasta.updateWhourStatus(selectDoctorID, date);
 							updateWhourModel(selectDoctorID);
+							updateAppointModel(hasta.getId());
 						} else {
 							Helper.showMsg("error");
 						}
@@ -249,16 +264,16 @@ public class HastaGUI extends JFrame {
 		lblPoliklinikAd_1_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 15));
 		lblPoliklinikAd_1_1.setBounds(300, 206, 96, 26);
 		w_appointment.add(lblPoliklinikAd_1_1);
-		
+
 		JPanel w_appoint = new JPanel();
 		w_tab.addTab("Randevularım", null, w_appoint, null);
 		w_appoint.setLayout(null);
-		
+
 		JScrollPane w_scrollAppoint = new JScrollPane();
 		w_scrollAppoint.setBounds(10, 10, 691, 321);
 		w_appoint.add(w_scrollAppoint);
-		
-		table_appoint = new JTable();
+
+		table_appoint = new JTable(appointModel);
 		w_scrollAppoint.setViewportView(table_appoint);
 	}
 
@@ -269,6 +284,17 @@ public class HastaGUI extends JFrame {
 			whourData[0] = whour.getWhourList(doctor_id).get(i).getId();
 			whourData[1] = whour.getWhourList(doctor_id).get(i).getWdate();
 			whourModel.addRow(whourData);
+		}
+	}
+	
+	public void updateAppointModel(int hasta_id) throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table_appoint.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < appoint.getHastaList(hasta_id).size(); i++) {
+			appointData[0] = appoint.getHastaList(hasta_id).get(i).getId();
+			appointData[1] = appoint.getHastaList(hasta_id).get(i).getDoctorName();
+			appointData[2] = appoint.getHastaList(hasta_id).get(i).getAppDate();
+			appointModel.addRow(appointData);
 		}
 	}
 }
